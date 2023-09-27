@@ -29,13 +29,12 @@ class UsersHandler {
       if (error instanceof ClientError) {
         const response = h.response({
           status: 'fail',
-          message: 'Gagal menambahkan user. Username sudah digunakan.',
+          message: error.message,
         });
         response.code(error.statusCode);
         return response;
       }
 
-      // Server ERROR!
       const response = h.response({
         status: 'error',
         message: 'Maaf, terjadi kegagalan pada server kami.',
@@ -69,7 +68,7 @@ class UsersHandler {
 
       const response = h.response({
         status: 'error',
-        message: 'Maaf, terjadi kesalahan pada server kami.',
+        message: 'Maaf, terjadi kegagalan pada server kami.',
       });
       response.code(500);
       console.error(error);
