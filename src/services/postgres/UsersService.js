@@ -12,7 +12,6 @@ class UsersService {
 
   async addUser({ username, password, fullname }) {
     await this.verifyNewUsername(username);
-
     const id = `user-${nanoid(16)}`;
     const hashedPassword = await bcrypt.hash(password, 10);
     const query = {
@@ -49,7 +48,7 @@ class UsersService {
 
     const result = await this._pool.query(query);
 
-    if (result.rows.length === 0) {
+    if (!result.rows.length) {
       throw new NotFoundError('User tidak ditemukan');
     }
 
@@ -69,6 +68,7 @@ class UsersService {
     }
 
     const { id, password: hashedPassword } = result.rows[0];
+
     const match = await bcrypt.compare(password, hashedPassword);
 
     if (!match) {
@@ -76,6 +76,15 @@ class UsersService {
     }
 
     return id;
+  }
+
+  async getUsersByUsername(username) {
+    const query = {
+      text: 'SELECT id, username, fullname FROM users WHERE username LIKE $1',
+      values: [`%${username}%`],
+    };
+    const result = await this._pool.query(query);
+    return result.rows;
   }
 }
 
