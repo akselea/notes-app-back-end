@@ -4,3 +4,6 @@ notes-api-test.postman_collection.json
 notes-api-test.postman_environment.json
 .env
 .prod.env
+flower.jpg
+txtfile.txt
+src/api/uploads/file
